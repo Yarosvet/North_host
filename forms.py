@@ -13,6 +13,5 @@ class LoginForm(FlaskForm):
 class RegForm(FlaskForm):
     username = StringField('Логин', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
-    password = PasswordField('Повторите пароль', validators=[DataRequired()])
-    remember_me = BooleanField('Запомнить меня')
+    password_again = PasswordField('Повторите пароль', validators=[DataRequired()])
     submit = SubmitField('Зарегистрироваться')

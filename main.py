@@ -1,12 +1,28 @@
 from flask import Flask, render_template, redirect
 from forms import LoginForm, RegForm
+import datetime
+from data import db_session
+from data.users import User
+from data.files import Files
+from flask_login import LoginManager, login_user, logout_user, current_user
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '77ac4973981o3xu7s1aj55o7cg76592z612wt4jg486u91u615j5587zh696x6q4'
+app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    session = db_session.create_session()
+    return session.query(User).get(user_id)
 
 
 @app.route('/')
 def index():
+    if current_user.is_authenticated:
+        return redirect('/cabinet')
     return render_template('index.html')
 
 
@@ -14,6 +30,14 @@ def index():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
+        session = db_session.create_session()
+        user = session.query(User).filter(User.login == form.username.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect("/cabinet")
+        return render_template('login.html',
+                               message="Неверный логин или пароль",
+                               form=form)
         return redirect('/cabinet')
     return render_template('login.html', form=form)
 
@@ -22,9 +46,32 @@ def login():
 def register():
     form = RegForm()
     if form.validate_on_submit():
-        return redirect('/cabinet')
-    return render_template('register.html', form=form)
+        if form.password.data != form.password_again.data:
+            return render_template('register.html', title='NorthHost - Регистрация',
+                                   form=form,
+                                   message="Пароли не совпадают")
+        session = db_session.create_session()
+        if session.query(User).filter(User.login == form.username.data).first():
+            return render_template('register.html', title='NorthHost - Регистрация',
+                                   form=form,
+                                   message="Такой пользователь уже есть")
+        user = User(
+            login=form.username.data,
+        )
+        user.set_password(form.password.data)
+        session.add(user)
+        session.commit()
+        return redirect('/login')
+    return render_template('register.html', form=form, title='NorthHost - Регистрация')
+
+
+@app.route('/cabinet')
+def cabinet():
+    if not current_user.is_authenticated:
+        return redirect('/')
+    return render_template('cabinet.html')
 
 
 if __name__ == '__main__':
+    db_session.global_init("db/data.sqlite")
     app.run(port=80, host='127.0.0.1')

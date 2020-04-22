@@ -1,23 +1,51 @@
-<!DOCTYPE html>
-<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>NorthHost - Регистрация</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+    <style>
+        .content {
+        position: absolute;
+        left: 43.5%;
+        top: 10%;
+        }
+    </style>
 </head>
-<body>
 {% block content %}
-<div>
+<div class ="content">
+<h1>Регистрация</h1>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
     {{ form.csrf_token }}
+    <p>
+        {{ form.username.label }}<br>
+        {{ form.username(class="form-control") }}<br>
+        {% for error in form.username.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.password.label }}<br>
+        {{ form.password(class="form-control", type="password") }}<br>
+        {% for error in form.password.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.password_again.label }}<br>
+        {{ form.password_again(class="form-control", type="password") }}<br>
+        {% for error in form.password_again.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    {{message}}
+</form>
 </div>
-{% for field in form if field.name != 'csrf_token' %}
-<div>
-    {{ field.label() }}
-    {{ field() }}
-    {% for error in field.errors %}
-    <div class="error">{{ error }}</div>
-    {% endfor %}
-</div>
-{% endfor %}
 {% endblock %}
-</body>
-</html>
