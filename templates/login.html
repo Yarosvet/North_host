@@ -12,6 +12,7 @@
         position: absolute;
         left: 42.5%;
         top: 10%;
+        text-align: center;
         }
 
 
@@ -42,6 +43,11 @@
         {% endfor %}
         </p>
         <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        {% if message %}
+        <div class="alert alert-danger" role="alert">
+            {{message}}
+        </div>
+        {% endif %}
         <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     </form>
     {% endblock %}
