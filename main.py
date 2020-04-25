@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect
-from forms import LoginForm, RegForm
+from forms import LoginForm, RegForm, ChangePassForm
 import datetime
 from data import db_session
 from data.users import User
@@ -75,10 +75,28 @@ def cabinet():
     return render_template('cabinet.html')
 
 
-@app.route('/cabinet/change_password')
+@app.route('/cabinet/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
-    return render_template('change_password.html')
+    form = ChangePassForm()
+    if form.validate_on_submit():
+        if form.password.data != form.password_again.data:
+            print(1)
+            return render_template('change_password.html', form=form,
+                                   message="Пароли не совпадают")
+        elif not current_user.check_password(form.old_password.data):
+            print(2)
+            return render_template('change_password.html', form=form,
+                                   message="Старый пароль введен неверно")
+        print(3)
+        # !!!
+        # !!!
+        #  Думаю, ошибка здесь (ниже)
+        # !!!
+        # !!!
+        current_user.set_password(form.password.data)
+        return redirect('/cabinet')
+    return render_template('change_password.html', form=form)
 
 
 @app.route('/cabinet/upload_file')

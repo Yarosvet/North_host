@@ -15,3 +15,10 @@ class RegForm(FlaskForm):
     password = PasswordField('Пароль', validators=[DataRequired()])
     password_again = PasswordField('Повторите пароль', validators=[DataRequired()])
     submit = SubmitField('Зарегистрироваться')
+
+
+class ChangePassForm(FlaskForm):
+    old_password = PasswordField('Старый пароль', validators=[DataRequired()])
+    password = PasswordField('Новый пароль', validators=[DataRequired()])
+    password_again = PasswordField('Повторите новый пароль', validators=[DataRequired()])
+    submit = SubmitField('Подтвердить')
