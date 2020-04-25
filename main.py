@@ -4,7 +4,7 @@ import datetime
 from data import db_session
 from data.users import User
 from data.files import Files
-from flask_login import LoginManager, login_user, logout_user, current_user
+from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '77ac4973981o3xu7s1aj55o7cg76592z612wt4jg486u91u615j5587zh696x6q4'
@@ -70,10 +70,28 @@ def register():
 
 
 @app.route('/cabinet')
+@login_required
 def cabinet():
-    if not current_user.is_authenticated:
-        return redirect('/')
     return render_template('cabinet.html')
+
+
+@app.route('/cabinet/change_password')
+@login_required
+def change_password():
+    return render_template('change_password.html')
+
+
+@app.route('/cabinet/upload_file')
+@login_required
+def upload_file():
+    return render_template('upload_file.html')
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/')
 
 
 if __name__ == '__main__':

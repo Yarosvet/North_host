@@ -1,16 +1,85 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous">
-    <title>NorthHost - личный кабинет</title>
+    <meta charset="utf-8">
+    <title>NorthHost - Личный кабинет</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+            ul.nav{
+                margin-left: 0px;
+                padding-left: 15%;
+                list-style: none;
+            }
+            .nav li {
+                float: left;
+            }
+          ul.nav2{
+                margin-left: 0px;
+                list-style: none;
+            }
+            .nav2 li {
+                float: right;
+                margin-right: 5px;
+            }
+            .upload_file button{
+            	position: absolute;
+            	top: 40%;
+                left: 30%;
+                width: 40%;
+                height: 20%;
+            }
+            .buttom_buttons button{
+            	position: absolute;
+            	top: 90%;
+                width: 10%;
+                height: 6%;
+            }
+
+
+
+
+
+    </style>
 </head>
 <body>
-<div class="content">
-
+<ul class="nav">
+    <li><img class="logo"
+             src="/static/img/logo.png"
+             width=50 height=50>
+    </li>
+    <li><h1>
+        orthHost
+    </h1></li>
+</ul>
+<ul class="nav2">
+    <li>
+        <a href="/logout">
+            <button class="btn btn-danger">
+                <b>Выход</b>
+                <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+            </button>
+        </a>
+    </li>
+    <li>
+        <a href="/cabinet/change_password">
+            <button class="btn btn-warning">
+                <b>Сменить пароль</b>
+                <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
+            </button>
+        </a>
+    </li>
+</ul>
+<div class="upload_file">
+    <a href="/cabinet/upload_file">
+        <button class="btn btn-info"><h1><span class="glyphicon glyphicon-upload" aria-hidden="true"></span><b>
+            Загрузить
+            файл</b></h1></button>
+    </a>
+</div>
+<div class="buttom_buttons">
+    <button class="btn btn-secondary"><b>API</b></button>
 </div>
 </body>
 </html>
