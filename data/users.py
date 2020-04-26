@@ -1,6 +1,6 @@
 import datetime
 import sqlalchemy
-from .db_session import SqlAlchemyBase
+from .db_session import SqlAlchemyBase, create_session
 from sqlalchemy import orm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -22,3 +22,14 @@ class User(SqlAlchemyBase, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
+
+    def change_password(self, id_to_update, password):
+        try:
+            session = create_session()
+            session.query(User).filter(User.id == id_to_update). \
+                update({User.hashed_password: generate_password_hash(password)}, synchronize_session=False)
+            session.commit()
+        except Exception as exc:
+            session.rollback()
+            return str(exc)
+        return False
