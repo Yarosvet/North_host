@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField
 from wtforms.validators import DataRequired
 
 
@@ -22,3 +22,10 @@ class ChangePassForm(FlaskForm):
     password = PasswordField('Новый пароль', validators=[DataRequired()])
     password_again = PasswordField('Повторите новый пароль', validators=[DataRequired()])
     submit = SubmitField('Подтвердить')
+
+
+class UploadFileForm(FlaskForm):
+    file = FileField('Файл')
+    comment = StringField('Комментарий (необязательно)')
+    is_private = BooleanField('Доступен только зарегистрированным пользователям')
+    submit = SubmitField('Загрузить')

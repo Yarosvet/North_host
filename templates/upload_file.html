@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>NorthHost - Загрузить файл</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style>ul.nav{
                 margin-left: 0px;
@@ -28,5 +27,41 @@
         </h1></li>
     </ul>
 </header>
+    {% if message %}
+    <p class="alert alert-danger" role="alert">[{{ message }}]</p>
+    {% endif %}
+    <p>
+            {{ form.file.label }}
+            {{ form.file(class="form-control", type="file", enctype="multipart/form-data", method="post") }}<br>
+            {% for error in form.file.errors %}
+        <p class="alert alert-danger" role="alert">
+            {{ error }}
+        </p>
+        {% endfor %}
+    <p>
+            {{ form.comment.label }}<br>
+            {{ form.comment(class="form-control", type="text") }}<br>
+            {% for error in form.comment.errors %}
+        <p class="alert alert-danger" role="alert">
+            {{ error }}
+        </p>
+        {% endfor %}
+    <p>
+            {{ form.is_private.label }}
+            {{ form.is_private() }}<br>
+            {% for error in form.is_private.errors %}
+        <p class="alert alert-danger" role="alert">
+            {{ error }}
+        </p>
+        {% endfor %}
+    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    {% if link %}
+        <p class="alert alert-success" role="alert">
+            Файл загружен!
+        </p>
+        <p class="alert alert-primary" role="alert">
+            Ссылка на файл: {{ link }}
+        </p>
+    {% endif %}
 </body>
 </html>

@@ -1,16 +1,4 @@
-from flask import Flask, render_template, redirect
-from forms import LoginForm, RegForm, ChangePassForm
-import datetime
-from data import db_session
-from data.users import User
-from data.files import Files
-from flask_login import LoginManager, login_user, logout_user, current_user, login_required
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = '77ac4973981o3xu7s1aj55o7cg76592z612wt4jg486u91u615j5587zh696x6q4'
-app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(days=365)
-login_manager = LoginManager()
-login_manager.init_app(app)
+from config import *
 
 
 @login_manager.user_loader
@@ -95,10 +83,29 @@ def change_password():
     return render_template('change_password.html', form=form)
 
 
-@app.route('/cabinet/upload_file')
+@app.route('/cabinet/upload_file', methods=['GET', 'POST'])
 @login_required
 def upload_file():
-    return render_template('upload_file.html')
+    form = UploadFileForm()
+    if form.validate_on_submit():
+        file = request.files["file"]
+        if bool(file.filename):
+            file_bytes = file.read(MAX_FILE_SIZE)
+            if len(file_bytes) >= MAX_FILE_SIZE:
+                return render_template('upload_file.html',
+                                       message=f'Размер файла превышает максимальный ({MAX_FILE_SIZE} байт)', form=form)
+            else:
+                session = db_session.create_session()
+                obj = Files(filename=file.filename, user_id=current_user.id, is_private=form.is_private.data,
+                            comment=form.comment.data)
+                session.add(obj)
+                session.commit()
+                f = open(f'files/{obj.id}/{file.filename}', 'wb')
+                f.write(file_bytes)
+                f.close()
+                del file_bytes
+                return render_template('upload_file.html', link=f"https://{domain}/getFile?id={obj.id}", form=form)
+    return render_template('upload_file.html', form=form)
 
 
 @app.route('/logout')
