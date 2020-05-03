@@ -27,7 +27,7 @@
 </head>
 <body>
 <header>
-    <ul class="nav">
+    <a href="/"><ul class="nav">
         <li><img class="logo"
                  src="/static/img/logo.png"
                  width=50 height=50>
@@ -35,17 +35,17 @@
         <li><h1>
             orthHost
         </h1></li>
-    </ul>
+    </ul></a>
 </header>
 <div class="content">
-    <form action="" method="post" novalidate>
+    <form action="" method="post" novalidate enctype="multipart/form-data">
         {{ form.hidden_tag() }}
     {% if message %}
     <p class="alert alert-danger" role="alert">[{{ message }}]</p>
     {% endif %}
     <p>
             {{ form.file.label }}
-            {{ form.file(class="file_space", type="file", enctype="multipart/form-data", method="post") }}<br>
+            {{ form.file(class="file_space", type="file", method="post") }}<br>
             {% for error in form.file.errors %}
         <p class="alert alert-danger" role="alert">
             Error: {{ error }}

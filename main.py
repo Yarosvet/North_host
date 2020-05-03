@@ -89,17 +89,18 @@ def upload_file():
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file
+        obj = Files(filename=file.data.filename, user_id=current_user.id, is_private=form.is_private.data,
+                    comment=form.comment.data)
         if not file.has_file():
             return render_template('upload_file.html', form=form, message="Выберите файл!")
         if file.data.content_length > MAX_FILE_SIZE:
             return render_template('upload_file.html',
                                    message=f'Размер файла превышает максимальный ({MAX_FILE_SIZE} байт)', form=form)
         session = db_session.create_session()
-        obj = Files(filename=file.filename, user_id=current_user.id, is_private=form.is_private.data,
-                    comment=form.comment.data)
         session.add(obj)
         session.commit()
-        file.data.save(f'files/{obj.id}/{file.filename}')
+        os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], str(obj.id)))
+        file.data.save(os.path.join(app.config['UPLOAD_FOLDER'], str(obj.id), file.data.filename))
         return render_template('upload_file.html', link=f"https://{domain}/getFile?id={obj.id}", form=form)
     return render_template('upload_file.html', form=form)
 
@@ -109,6 +110,8 @@ def upload_file():
 def logout():
     logout_user()
     return redirect('/')
+
+
 
 
 if __name__ == '__main__':
