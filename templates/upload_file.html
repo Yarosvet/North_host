@@ -13,6 +13,16 @@
             .nav li {
                 float: left;
             }
+            .content {
+            position: absolute;
+            left: 42.5%;
+            top: 10%;
+            text-align: center;
+            }
+            .file_space {
+            position: relative;
+            left: 30%;
+            }
     </style>
 </head>
 <body>
@@ -27,15 +37,18 @@
         </h1></li>
     </ul>
 </header>
+<div class="content">
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
     {% if message %}
     <p class="alert alert-danger" role="alert">[{{ message }}]</p>
     {% endif %}
     <p>
             {{ form.file.label }}
-            {{ form.file(class="form-control", type="file", enctype="multipart/form-data", method="post") }}<br>
+            {{ form.file(class="file_space", type="file", enctype="multipart/form-data", method="post") }}<br>
             {% for error in form.file.errors %}
         <p class="alert alert-danger" role="alert">
-            {{ error }}
+            Error: {{ error }}
         </p>
         {% endfor %}
     <p>
@@ -63,5 +76,7 @@
             Ссылка на файл: {{ link }}
         </p>
     {% endif %}
+    </form>
+</div>
 </body>
 </html>
