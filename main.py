@@ -1,6 +1,12 @@
 from config import *
 
 
+def get_file_class(file_id):
+    session = db_session.create_session()
+    file = session.query(Files).get(file_id)
+    return file
+
+
 @login_manager.user_loader
 def load_user(user_id):
     session = db_session.create_session()
@@ -101,7 +107,7 @@ def upload_file():
         session.commit()
         os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], str(obj.id)))
         file.data.save(os.path.join(app.config['UPLOAD_FOLDER'], str(obj.id), file.data.filename))
-        return render_template('upload_file.html', link=f"https://{domain}/getFile?id={obj.id}", form=form)
+        return render_template('upload_file.html', link=f"http://{domain}/getFile?id={obj.id}", form=form)
     return render_template('upload_file.html', form=form)
 
 
@@ -112,6 +118,34 @@ def logout():
     return redirect('/')
 
 
+@app.route('/infoFile')
+def infoFile():
+    file_id = int(request.args.get('id'))
+    if not file_id:
+        return redirect('/')
+    file = get_file_class(file_id)
+    if not file:
+        return abort(404)
+    if file.is_private and not current_user.is_authenticated():
+        return abort(403)
+    dt = ''
+    username = ''
+    return render_template('getFile.html', filename=file.name, comment=file.comment, downloaded=file.downloaded,
+                           date=dt, username=username, download_link=f"/download?id={file_id}")
+
+
+@app.route('/download')
+def download():
+    file_id = int(request.args.get('id'))
+    if not file_id:
+        return redirect('/')
+    file = get_file_class(file_id)
+    if not file:
+        return abort(404)
+    if file.is_private and not current_user.is_authenticated():
+        return abort(403)
+    send_file(os.path.join(app.config['UPLOAD_FOLDER'], file_id, file.filename))
+    return redirect('/')
 
 
 if __name__ == '__main__':

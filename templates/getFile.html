@@ -34,7 +34,14 @@
     </ul></a>
 </header>
 <div class="content">
-
+    <h1>{{ filename }}</h1><br>
+    {% if comment %}
+        <p>Комментиарий</p><br>
+        <p>{{ comment }}</p><br>
+    {% endif %}
+    <p>Пользователь: {{ username }}</p><br>
+    <p>Файл скачан {{ downloaded }} раз     Дата добавления файла: {{ date }}</p>
+    <a href={{ download_link }}><button class="btn btn-success">Скачать</button></a>
 </div>
 </body>
 </html>

@@ -29,6 +29,7 @@ class User(SqlAlchemyBase, UserMixin):
             session.query(User).filter(User.id == id_to_update). \
                 update({User.hashed_password: generate_password_hash(password)}, synchronize_session=False)
             session.commit()
+            self.hashed_password = generate_password_hash(password)
         except Exception as exc:
             session.rollback()
             return str(exc)
