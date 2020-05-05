@@ -135,10 +135,10 @@ def infoFile():
     dt = f"{day}.{month}.{year}"
     username = ''
     return render_template('getFile.html', filename=file.filename, comment=file.comment, downloaded=file.downloaded,
-                           date=dt, username=username, download_link=f"/download?id={file_id}/{file.filename}")
+                           date=dt, username=username, download_link=f"/download?id={file_id}")
 
 
-@app.route('/download/')
+@app.route('/download')
 def download():
     file_id = int(request.args.get('id'))
     if not file_id:
@@ -149,7 +149,7 @@ def download():
     if file.is_private and not current_user.is_authenticated():
         return abort(401)
     path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], str(file_id))
-    return send_from_directory(path, file.filename)
+    return send_from_directory(directory=path, filename=file.filename)
 
 
 if __name__ == '__main__':
