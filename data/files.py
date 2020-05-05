@@ -22,6 +22,5 @@ class Files(SqlAlchemyBase):
     def increment_download(self):
         self.downloaded += 1
         session = create_session()
-        session.query(Files).filter(Files.id == int(self.id)). \
-            update({Files.id: self.downloaded}, synchronize_session=False)
+        session.merge(self)
         session.commit()
