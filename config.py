@@ -6,7 +6,6 @@ import os
 from forms import LoginForm, RegForm, ChangePassForm, UploadFileForm
 from data import db_session
 from data.users import User
-from data.files import Files
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '77ac4973981o3xu7s1aj55o7cg76592z612wt4jg486u91u615j5587zh696x6q4'

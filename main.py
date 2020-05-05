@@ -1,10 +1,6 @@
 from config import *
-
-
-def get_file_class(file_id):
-    session = db_session.create_session()
-    file = session.query(Files).get(file_id)
-    return file
+from api import blueprint
+from data.files import Files
 
 
 @login_manager.user_loader
@@ -159,4 +155,5 @@ def download():
 
 if __name__ == '__main__':
     db_session.global_init("db/data.sqlite")
+    app.register_blueprint(blueprint)
     app.run(port=80, host='127.0.0.1')

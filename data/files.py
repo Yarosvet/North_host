@@ -2,6 +2,7 @@ import datetime
 import sqlalchemy
 from sqlalchemy import orm
 from .db_session import SqlAlchemyBase, create_session
+from config import domain
 
 
 class Files(SqlAlchemyBase):
@@ -22,5 +23,17 @@ class Files(SqlAlchemyBase):
     def increment_download(self):
         self.downloaded += 1
         session = create_session()
-        session.merge(self)
+        session.query(Files).filter(Files.id == self.id). \
+            update({Files.downloaded: self.downloaded}, synchronize_session=False)
         session.commit()
+
+    def to_dict(self):
+        return {'id': self.id, 'filename': self.filename, 'comment': self.comment, 'upload_date': self.upload_date,
+                'is_private': self.is_private, 'user_id': self.user_id, 'downloaded': self.downloaded,
+                'username': self.user.login, 'download_link': f'http://{domain}/download?id={self.id}'}
+
+
+def get_file_class(file_id):
+    session = create_session()
+    file = session.query(Files).get(file_id)
+    return file
