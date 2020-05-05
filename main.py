@@ -107,7 +107,7 @@ def upload_file():
         session.commit()
         os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], str(obj.id)))
         file.data.save(os.path.join(app.config['UPLOAD_FOLDER'], str(obj.id), file.data.filename))
-        return render_template('upload_file.html', link=f"http://{domain}/getFile?id={obj.id}", form=form)
+        return render_template('upload_file.html', link=f"http://{domain}/infoFile?id={obj.id}", form=form)
     return render_template('upload_file.html', form=form)
 
 
@@ -127,14 +127,18 @@ def infoFile():
     if not file:
         return abort(404)
     if file.is_private and not current_user.is_authenticated():
-        return abort(403)
-    dt = ''
+        return abort(401)
+    dt = file.upload_date.date()
+    day = str(dt.day).rjust(2, '0')
+    month = str(dt.month).rjust(2, '0')
+    year = str(dt.year).rjust(4, '0')
+    dt = f"{day}.{month}.{year}"
     username = ''
-    return render_template('getFile.html', filename=file.name, comment=file.comment, downloaded=file.downloaded,
-                           date=dt, username=username, download_link=f"/download?id={file_id}")
+    return render_template('getFile.html', filename=file.filename, comment=file.comment, downloaded=file.downloaded,
+                           date=dt, username=username, download_link=f"/download?id={file_id}/{file.filename}")
 
 
-@app.route('/download')
+@app.route('/download/')
 def download():
     file_id = int(request.args.get('id'))
     if not file_id:
@@ -143,9 +147,9 @@ def download():
     if not file:
         return abort(404)
     if file.is_private and not current_user.is_authenticated():
-        return abort(403)
-    send_file(os.path.join(app.config['UPLOAD_FOLDER'], file_id, file.filename))
-    return redirect('/')
+        return abort(401)
+    path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], str(file_id))
+    return send_from_directory(path, file.filename)
 
 
 if __name__ == '__main__':
