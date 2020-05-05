@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NorthHost - API</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>ul.nav{
+                margin-left: 0px;
+                padding-left: 15%;
+                list-style: none;
+            }
+            .nav li {
+                float: left;
+            }
+            .content {
+            text-align: center;
+            }
+
+    </style>
+</head>
+<body>
+<header>
+    <a href="/">
+        <ul class="nav">
+            <li><img class="logo"
+                     src="/static/img/logo.png"
+                     width=50 height=50>
+            </li>
+            <li><h1>
+                orthHost
+            </h1></li>
+        </ul>
+    </a>
+</header>
+<div class="content">
+    <h1>API NorthHost</h1><br>
+    <h2>Вы можете получать информацию а файлах с помощью API с форматом результата JSON.</h2>
+    <b>Пример запроса получения информации о файле с ID 4444</b>
+    <div class="alert alert-info" role="alert">GET http://{{ domain }}/api/infoFile/4444</div><br>
+    <b>Пример ответа на подобный запрос (JSON)</b>
+    <div class="alert alert-info" role="alert">{"comment":"Test file",
+        "download_link":"http://{{ domain }}/download?id=1",
+        "downloaded":0,
+        "filename":"file.txt",
+        "id":4444,"is_private":false,
+        "upload_date":"Tue,05 May 2020 21:32:16 GMT",
+        "user_id":1,
+        "username":"Admin"}</div>
+</div>
+</body>
+</html>

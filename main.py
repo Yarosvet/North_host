@@ -1,6 +1,6 @@
 from config import *
 from api import blueprint
-from data.files import Files
+from data.files import Files, get_file_class
 
 
 @login_manager.user_loader
@@ -151,6 +151,11 @@ def download():
     session.merge(file)
     session.commit()
     return send_file(os.path.join(path, file.filename), as_attachment=True)
+
+
+@app.route('/api')
+def api_page():
+    return render_template('api.html', domain=domain)
 
 
 if __name__ == '__main__':
