@@ -104,7 +104,6 @@ def upload_file():
                                    message=f'Размер файла превышает максимальный ({MAX_FILE_SIZE} байт)', form=form)
         session = db_session.create_session()
         session.add(obj)
-        current_user.files.append(obj)
         session.merge(current_user)
         session.commit()
         os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], str(obj.id)))
@@ -128,7 +127,7 @@ def infoFile():
     file = get_file_class(file_id)
     if not file:
         return abort(404)
-    if file.is_private and not current_user.is_authenticated():
+    if file.is_private and not current_user.is_authenticated:
         return abort(401)
     dt = file.upload_date.date()
     day = str(dt.day).rjust(2, '0')
@@ -148,14 +147,14 @@ def download():
     file = get_file_class(file_id)
     if not file:
         return abort(404)
-    if file.is_private and not current_user.is_authenticated():
+    if file.is_private and not current_user.is_authenticated:
         return abort(401)
     path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], str(file_id))
     file.downloaded += 1
     session = db_session.create_session()
     session.merge(file)
     session.commit()
-    return send_from_directory(directory=path, filename=file.filename)
+    return send_file(os.path.join(path, file.filename), as_attachment=True)
 
 
 if __name__ == '__main__':
