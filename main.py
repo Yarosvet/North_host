@@ -168,4 +168,4 @@ if __name__ == '__main__':
     #  Инициализация API
     app.register_blueprint(blueprint)
     #  Запусе сервера
-    app.run(port=80, host=domain)
+    app.run(port=80)
