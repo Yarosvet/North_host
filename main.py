@@ -138,7 +138,7 @@ def infoFile():
     year = str(dt.year).rjust(4, '0')
     dt = f"{day}.{month}.{year}"
     username = file.user.login
-    return render_template('getFile.html', filename=file.filename, comment=file.comment, downloaded=file.downloaded,
+    return render_template('getFile.html', filename=file.filename, comment=file.comment,
                            date=dt, username=username, download_link=f"/download?id={file_id}")
 
 
@@ -154,7 +154,6 @@ def download():
     if file.is_private and not current_user.is_authenticated:
         return abort(401)
     path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], str(file_id))
-    file.set_downloaded(file.id, int(file.downloaded) + 1)
     return send_file(os.path.join(path, file.filename), as_attachment=True)
 
 #  Страница API

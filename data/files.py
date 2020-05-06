@@ -18,26 +18,12 @@ class Files(SqlAlchemyBase):
     is_private = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
-    downloaded = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     user = orm.relation('User')
-
-    #  Изменение количества скачиваний
-    def set_downloaded(self, id_to_update, n):
-        session = create_session()
-        try:
-            session.query(Files).filter(Files.id == id_to_update). \
-                update({Files.downloaded: n}, synchronize_session=False)
-            session.commit()
-            self.downloaded = n
-        except Exception as exc:
-            session.rollback()
-            return str(exc)
-        return False
 
     #  Перевод в словарь, сериализер не удобный, легче сделать руками
     def to_dict(self):
         return {'id': self.id, 'filename': self.filename, 'comment': self.comment, 'upload_date': self.upload_date,
-                'is_private': self.is_private, 'user_id': self.user_id, 'downloaded': self.downloaded,
+                'is_private': self.is_private, 'user_id': self.user_id,
                 'username': self.user.login, 'download_link': f'http://{domain}/download?id={self.id}'}
 
 
