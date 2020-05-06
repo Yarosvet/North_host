@@ -17,4 +17,4 @@ login_manager.init_app(app)
 #  Максимальный размер файла
 MAX_FILE_SIZE = 1024 * 1024 + 1
 #  Домен, на котором располагается сайт (обязательно для работы)
-domain = "127.0.0.1"
+domain = "north-host.herokuapp.com"
