@@ -4,6 +4,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 
 
+#  Форма входа
 class LoginForm(FlaskForm):
     username = StringField('Логин', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
@@ -11,6 +12,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Войти')
 
 
+#  Форма регистрации
 class RegForm(FlaskForm):
     username = StringField('Логин', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
@@ -18,6 +20,7 @@ class RegForm(FlaskForm):
     submit = SubmitField('Зарегистрироваться')
 
 
+#  Форма смены пароля
 class ChangePassForm(FlaskForm):
     old_password = PasswordField('Старый пароль', validators=[DataRequired()])
     password = PasswordField('Новый пароль', validators=[DataRequired()])
@@ -25,6 +28,7 @@ class ChangePassForm(FlaskForm):
     submit = SubmitField('Подтвердить')
 
 
+#  Форма загрузки файла
 class UploadFileForm(FlaskForm):
     file = FileField('Файл')
     comment = StringField('Комментарий (необязательно)')

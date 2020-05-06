@@ -3,12 +3,14 @@ from api import blueprint
 from data.files import Files, get_file_class
 
 
+#  Получение пользователя
 @login_manager.user_loader
 def load_user(user_id):
     session = db_session.create_session()
     return session.query(User).get(user_id)
 
 
+#  Главная страница
 @app.route('/')
 def index():
     if current_user.is_authenticated:
@@ -16,6 +18,7 @@ def index():
     return render_template('index.html')
 
 
+#  Страница входа
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -30,10 +33,9 @@ def login():
         return render_template('login.html',
                                message="Неверный логин или пароль",
                                form=form)
-        return redirect('/cabinet')
     return render_template('login.html', form=form)
 
-
+#  Регистрация
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -59,12 +61,14 @@ def register():
     return render_template('register.html', form=form, title='NorthHost - Регистрация')
 
 
+#  Личный кабинет
 @app.route('/cabinet')
 @login_required
 def cabinet():
     return render_template('cabinet.html')
 
 
+#  Смена пароля
 @app.route('/cabinet/change_password', methods=['GET', 'POST'])
 @login_required
 def change_password():
@@ -85,6 +89,7 @@ def change_password():
     return render_template('change_password.html', form=form)
 
 
+#  Страница загрузки файла
 @app.route('/cabinet/upload_file', methods=['GET', 'POST'])
 @login_required
 def upload_file():
@@ -108,6 +113,7 @@ def upload_file():
     return render_template('upload_file.html', form=form)
 
 
+#  Выход
 @app.route('/logout')
 @login_required
 def logout():
@@ -115,6 +121,7 @@ def logout():
     return redirect('/')
 
 
+#  Страница файла
 @app.route('/infoFile')
 def infoFile():
     file_id = int(request.args.get('id'))
@@ -135,6 +142,7 @@ def infoFile():
                            date=dt, username=username, download_link=f"/download?id={file_id}")
 
 
+#  Скачивание файла
 @app.route('/download')
 def download():
     file_id = int(request.args.get('id'))
@@ -146,19 +154,19 @@ def download():
     if file.is_private and not current_user.is_authenticated:
         return abort(401)
     path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], str(file_id))
-    file.downloaded += 1
-    session = db_session.create_session()
-    session.merge(file)
-    session.commit()
+    file.set_downloaded(file.id, int(file.downloaded) + 1)
     return send_file(os.path.join(path, file.filename), as_attachment=True)
 
-
+#  Страница API
 @app.route('/api')
 def api_page():
     return render_template('api.html', domain=domain)
 
 
 if __name__ == '__main__':
+    #  Инициализация БД
     db_session.global_init("db/data.sqlite")
+    #  Инициализация API
     app.register_blueprint(blueprint)
+    #  Запусе сервера
     app.run(port=80, host='127.0.0.1')
