@@ -1,6 +1,7 @@
 # North host
 ![Cabinet](https://raw.githubusercontent.com/Yarosvet/North_host/master/static/img/screenshot1.png)
 ![Upload](https://raw.githubusercontent.com/Yarosvet/North_host/master/static/img/screenshot2.png)
+---
 A simple file hosting written on Flask framework.
 
 # Run
