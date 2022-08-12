@@ -1,9 +1,14 @@
-# North_host
-File hosting based on python.
+# North host
+![Cabinet](https://raw.githubusercontent.com/Yarosvet/North_host/master/static/img/screenshot1.png)
+![Upload](https://raw.githubusercontent.com/Yarosvet/North_host/master/static/img/screenshot2.png)
+A simple file hosting written on Flask framework.
 
-# Installation and Run
-$ pip3 install -r requirements.txt && mkdir files && python3 main.py
-
+# Run
+```
+pip3 install -r requirements.txt
+mkdir files
+python3 main.py
+```
 # Sources:
 Background on the main page - https://yandex.by/collections/card/5919bf9d78242bc5bb86ad4a/?torec=1
 ***
