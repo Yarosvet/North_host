@@ -5,7 +5,7 @@
 A simple file hosting written on Flask framework.
 
 # Run
-```
+```bash
 pip3 install -r requirements.txt
 mkdir files
 python3 main.py
